@@ -1,0 +1,555 @@
+openapi: 3.1.0
+info:
+  title: WhatTheFridge API
+  version: 0.2.0
+  summary: API for fridge-based recipe generation.
+  description: |
+    API for an application where users scan product barcodes to build a virtual fridge.
+    The system then uses fridge content, food pairing, and user preferences to suggest
+    recipes and generate a complete dish proposal.
+servers:
+  - url: https://api.whatthefridge.com
+    description: Production
+  - url: http://localhost:8080
+    description: Local development
+tags:
+  - name: Fridge
+    description: Fridge item scanning and management.
+  - name: Recipes
+    description: Recipe generation and suggestions.
+paths:
+  /v1/fridge/items:scan:
+    post:
+      operationId: scanFridgeItem
+      tags:
+        - Fridge
+      summary: Scans a barcode and returns a normalized fridge item.
+      description: |
+        Accepts a product barcode (EAN/UPC) and optional quantity.
+        Returns product metadata that can be saved in the user's fridge.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanFridgeItemRequest'
+      responses:
+        '200':
+          description: Barcode resolved and item normalized successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanFridgeItemResponse'
+        '400':
+          description: Invalid barcode payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found for the provided barcode.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/recipes/generate:
+    post:
+      operationId: generateRecipeFromFridge
+      tags:
+        - Recipes
+      summary: Generates one recipe from fridge items and preferences.
+      description: |
+        Accepts a list of ingredients currently available in the user's fridge,
+        optional dietary/preparation constraints, and generation context.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateRecipeRequest'
+            examples:
+              simple:
+                summary: Basic generation request
+                value:
+                  fridgeItems:
+                    - id: item-001
+                      productName: Mozzarella
+                      quantity:
+                        value: 1
+                        unit: piece
+                    - id: item-002
+                      productName: Tomato
+                      quantity:
+                        value: 4
+                        unit: piece
+                    - id: item-003
+                      productName: Basil
+                      quantity:
+                        value: 20
+                        unit: g
+                  constraints:
+                    maxPreparationTimeMinutes: 25
+                    servings: 2
+                  preferences:
+                    cuisineHints:
+                      - italian
+                    excludeIngredients:
+                      - nuts
+      responses:
+        '200':
+          description: Recipe generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateRecipeResponse'
+        '400':
+          description: Invalid input payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Unable to generate a recipe from provided data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /v1/recipes/suggestions:
+    get:
+      operationId: listRecipeSuggestions
+      tags:
+        - Recipes
+      summary: Returns recipe suggestions based on fridge content.
+      description: |
+        Returns a ranked list of recipe suggestions using available fridge items,
+        optional constraints, and user preferences.
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          description: Maximum number of suggestions to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - in: query
+          name: maxPreparationTimeMinutes
+          required: false
+          schema:
+            type: integer
+            minimum: 5
+            maximum: 300
+        - in: query
+          name: servings
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+        - in: query
+          name: dietaryTag
+          required: false
+          schema:
+            type: string
+            enum:
+              - vegetarian
+              - vegan
+              - gluten_free
+              - lactose_free
+              - high_protein
+        - in: query
+          name: cuisineHint
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Suggestions returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeSuggestionsResponse'
+        '400':
+          description: Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ScanFridgeItemRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - barcode
+      properties:
+        barcode:
+          type: string
+          minLength: 8
+          maxLength: 20
+          description: EAN/UPC barcode value.
+          example: "5901234123457"
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        source:
+          type: string
+          description: How the barcode was captured.
+          enum:
+            - camera
+            - manual_input
+          default: camera
+
+    ScanFridgeItemResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - item
+      properties:
+        item:
+          $ref: '#/components/schemas/FridgeItem'
+        productFound:
+          type: boolean
+          default: true
+
+    GenerateRecipeRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - fridgeItems
+      properties:
+        fridgeItems:
+          type: array
+          minItems: 1
+          maxItems: 200
+          description: Products currently available in the user's fridge.
+          items:
+            $ref: '#/components/schemas/FridgeItem'
+        constraints:
+          $ref: '#/components/schemas/RecipeConstraints'
+        preferences:
+          $ref: '#/components/schemas/RecipePreferences'
+        context:
+          $ref: '#/components/schemas/GenerationContext'
+
+    GenerateRecipeResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - recipe
+      properties:
+        recipe:
+          $ref: '#/components/schemas/Recipe'
+        matchInfo:
+          $ref: '#/components/schemas/RecipeMatchInfo'
+
+    RecipeSuggestionsResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - suggestions
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeSuggestion'
+
+    RecipeSuggestion:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - title
+        - estimatedTimeMinutes
+        - matchScore
+      properties:
+        id:
+          type: string
+          example: rec-123
+        title:
+          type: string
+          example: Tomato Basil Pasta
+        estimatedTimeMinutes:
+          type: integer
+          minimum: 1
+          example: 20
+        matchScore:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.91
+        missingIngredients:
+          type: array
+          items:
+            type: string
+          example:
+            - olive oil
+        dietaryTags:
+          type: array
+          items:
+            type: string
+
+    FridgeItem:
+      type: object
+      additionalProperties: false
+      required:
+        - productName
+      properties:
+        id:
+          type: string
+          description: Unique fridge item identifier.
+          example: item-001
+        barcode:
+          type: string
+          description: Product barcode (EAN/UPC).
+          example: "5901234123457"
+        productName:
+          type: string
+          minLength: 1
+          example: Tomato
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        category:
+          type: string
+          example: vegetables
+        brand:
+          type: string
+          example: Local Farm
+
+    Quantity:
+      type: object
+      additionalProperties: false
+      required:
+        - value
+        - unit
+      properties:
+        value:
+          type: number
+          minimum: 0
+          example: 2
+        unit:
+          type: string
+          enum:
+            - g
+            - kg
+            - ml
+            - l
+            - piece
+            - tbsp
+            - tsp
+
+    RecipeConstraints:
+      type: object
+      additionalProperties: false
+      properties:
+        maxPreparationTimeMinutes:
+          type: integer
+          minimum: 5
+          maximum: 300
+          example: 30
+        servings:
+          type: integer
+          minimum: 1
+          maximum: 12
+          example: 2
+        difficulty:
+          type: string
+          enum:
+            - easy
+            - medium
+            - hard
+
+    RecipePreferences:
+      type: object
+      additionalProperties: false
+      properties:
+        dietaryTags:
+          type: array
+          items:
+            type: string
+            enum:
+              - vegetarian
+              - vegan
+              - gluten_free
+              - lactose_free
+              - high_protein
+        cuisineHints:
+          type: array
+          items:
+            type: string
+          example:
+            - italian
+            - mediterranean
+        excludeIngredients:
+          type: array
+          items:
+            type: string
+          example:
+            - nuts
+            - shellfish
+
+    GenerationContext:
+      type: object
+      additionalProperties: false
+      properties:
+        language:
+          type: string
+          default: en
+          example: en
+        userGoal:
+          type: string
+          description: User goal, for example quick dinner or high-protein meal.
+          example: quick_dinner
+        availableAppliances:
+          type: array
+          items:
+            type: string
+          example:
+            - oven
+            - stove
+
+    Recipe:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - servings
+        - estimatedTimeMinutes
+        - ingredients
+        - steps
+      properties:
+        title:
+          type: string
+          example: Quick Caprese with Toasted Bread
+        description:
+          type: string
+        servings:
+          type: integer
+          minimum: 1
+          example: 2
+        estimatedTimeMinutes:
+          type: integer
+          minimum: 1
+          example: 20
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeIngredient'
+        steps:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RecipeStep'
+        nutrition:
+          $ref: '#/components/schemas/Nutrition'
+
+    RecipeIngredient:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Mozzarella
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        fromFridge:
+          type: boolean
+          description: Whether the ingredient is already available in the fridge.
+          default: true
+        optional:
+          type: boolean
+          default: false
+
+    RecipeStep:
+      type: object
+      additionalProperties: false
+      required:
+        - order
+        - instruction
+      properties:
+        order:
+          type: integer
+          minimum: 1
+        instruction:
+          type: string
+          minLength: 3
+          example: Slice tomatoes and mozzarella, then layer with basil leaves.
+
+    Nutrition:
+      type: object
+      additionalProperties: false
+      properties:
+        caloriesKcal:
+          type: integer
+          minimum: 0
+        proteinG:
+          type: number
+          minimum: 0
+        fatG:
+          type: number
+          minimum: 0
+        carbsG:
+          type: number
+          minimum: 0
+
+    RecipeMatchInfo:
+      type: object
+      additionalProperties: false
+      properties:
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Match confidence against fridge content and preferences.
+          example: 0.89
+        foodPairingHighlights:
+          type: array
+          items:
+            type: string
+          example:
+            - Tomato pairs very well with basil and mozzarella.
+            - Olive oil enhances fresh herb aroma.
+        missingIngredients:
+          type: array
+          description: Ingredients required but not currently available in fridge.
+          items:
+            type: string
+          example:
+            - olive oil
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          example: NO_RECIPE_FOUND
+        message:
+          type: string
+          example: Unable to generate a recipe from the provided ingredients.
