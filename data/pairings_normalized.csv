@@ -1,0 +1,26 @@
+ingredient_a_id,ingredient_a_name,ingredient_b_id,ingredient_b_name,strength,score,notes,source,cuisine
+lamb,Lamb,apricot,Apricot,high,0.90,Classic combination where sweet fruit cuts through rich meat.,The Flavour Thesaurus,Middle Eastern
+pork,Pork,apple,Apple,high,0.90,Sweetness of apple balances the fattiness of pork.,The Flavour Thesaurus,European
+chocolate,Chocolate,chilli,Chilli,high,0.90,The heat of chilli enhances the depth of cocoa.,The Flavour Thesaurus,Mexican
+goat_cheese,Goat Cheese,beetroot,Beetroot,high,0.90,Earthy sweetness meets tangy creaminess.,The Flavour Thesaurus,European
+lamb,Lamb,rosemary,Rosemary,high,0.90,Resinous herbs stand up to robust meats.,The Flavour Thesaurus,Mediterranean
+watermelon,Watermelon,feta,Feta,medium,0.70,Salty and refreshing sweet contrast.,The Flavour Thesaurus,Mediterranean
+beef,Beef,mushroom,Mushroom,high,0.90,Deep umami synergy.,The Flavour Thesaurus,European
+chicken,Chicken,mushroom,Mushroom,medium,0.70,Earthy notes complement mild poultry.,The Flavour Thesaurus,European
+apple,Apple,blackberry,Blackberry,high,0.90,Classic sweet and tart autumn pairing.,The Flavour Thesaurus,European
+basil,Basil,tomato,Tomato,high,0.90,Bright herbal notes lift the acidity of the tomato.,The Flavour Thesaurus,Mediterranean
+cabbage,Cabbage,bacon,Bacon,high,0.90,Salty fat balances sulfurous brassica notes.,The Flavour Thesaurus,European
+cardamom,Cardamom,coffee,Coffee,medium,0.70,Aromatic spice cuts through roasted bitterness.,The Flavour Thesaurus,Middle Eastern
+cauliflower,Cauliflower,cheese,Cheese,high,0.90,Nutty cauliflower enhanced by sharp dairy.,The Flavour Thesaurus,European
+cucumber,Cucumber,mint,Mint,medium,0.70,Cooling and refreshing elements combined.,The Flavour Thesaurus,Mediterranean
+fig,Fig,prosciutto,Prosciutto,high,0.90,Sweet honeyed fruit paired with salty cured meat.,The Flavour Thesaurus,Mediterranean
+ginger,Ginger,pork,Pork,high,0.90,Spicy heat cuts through rich pork fat.,The Flavour Thesaurus,Asian
+lemon,Lemon,chicken,Chicken,high,0.90,Acidic lift for roasted or grilled poultry.,The Flavour Thesaurus,Global
+pea,Pea,mint,Mint,medium,0.70,Fresh spring sweetness elevated by cooling herbs.,The Flavour Thesaurus,European
+rhubarb,Rhubarb,custard,Custard,high,0.90,Sharp acidic fruit smoothed by rich vanilla dairy.,The Flavour Thesaurus,European
+salmon,Salmon,dill,Dill,high,0.90,Anise-like herb cuts through oily fish.,The Flavour Thesaurus,Scandinavian
+strawberry,Strawberry,balsamic,Balsamic,medium,0.70,Aged acid highlights the berry's natural sweetness.,The Flavour Thesaurus,Mediterranean
+truffle,Truffle,egg,Egg,high,0.90,Earthy luxury pairs with a rich blank canvas.,The Flavour Thesaurus,European
+walnut,Walnut,blue_cheese,Blue Cheese,high,0.90,Tannic crunch meets sharp and creamy mold.,The Flavour Thesaurus,European
+anise,Anise,pork,Pork,medium,0.70,Licorice notes complement rich slow-cooked meat.,The Flavour Thesaurus,Asian
+asparagus,Asparagus,egg,Egg,high,0.90,Grassy green notes wrapped in rich yolk.,The Flavour Thesaurus,European
