@@ -293,6 +293,12 @@ footer {
   margin-top: 0.2rem;
 }
 
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
 footer a {
   color: var(--primary-strong);
 }
