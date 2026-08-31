@@ -5,14 +5,14 @@
 
 const SCHEDULE = {
   piatek: [
-    { time: "18:00", title: "Przyjazd i rejestracja", desc: "Powitanie uczestników z poza Bielska i okolic" },
+    { time: "18:00", title: "Przyjazd i rejestracja", desc: "Powitanie uczestników spoza Bielska i okolic" },
     { time: "21:00", title: "Kasyno", desc: "Wieczór zapoznawczy- ćwiczenia z terapii szokowej" },
   ],
   sobota: [
-    { time: "10:00", title: "Long Run 12 km z Prevencem Belą", desc: "Techniki wicemistrza Węgier z 1997 roku- jak radzić sobie z wypaleniem" },
+    { time: "10:00", title: "Long Run 12+ km z Prevencem Belą", desc: "Techniki wicemistrza Węgier z 1997 roku- jak radzić sobie z wypaleniem" },
     { time: "16:30", title: "Prezentacje futures", desc: "Networking i poczęstunek" },
     { time: "22:00", title: "Mistrzostwa ulicy Pawiej 25 w Chomiki", desc: "Zajęcia z radzenia sobie z burzliwymi emocjami" },
-    { time: "24:00", title: "Eksploracja TempleOS", desc: "Wydarzenie specjalne- jak zbudowany jest idealny software" },
+    { time: "00:00", title: "Eksploracja TempleOS", desc: "Wydarzenie specjalne- jak zbudowany jest idealny software" },
   ],
   niedziela: [
     { time: "08:00", title: "Wyjście w góry z Marcinem Woźniakiem", desc: "W życiu ważny jest oddech, ochłonięcie po zajmującym głowę czasie" },
