@@ -11,7 +11,7 @@ const SCHEDULE = {
   sobota: [
     { time: "10:00", title: "Long Run 12 km z Prevencem Belą", desc: "Techniki wicemistrza Węgier z 1997 roku- jak radzić sobie z wypaleniem" },
     { time: "16:30", title: "Prezentacje futures", desc: "Networking i poczęstunek" },
-    { time: "22:00", title: "Mistrzostwa ulicy Błotnej 13 w Chomiki", desc: "Zajęcia z radzenia sobie z burzliwymi emocjami" },
+    { time: "22:00", title: "Mistrzostwa ulicy Pawiej 25 w Chomiki", desc: "Zajęcia z radzenia sobie z burzliwymi emocjami" },
     { time: "24:00", title: "Eksploracja TempleOS", desc: "Wydarzenie specjalne- jak zbudowany jest idealny software" },
   ],
   niedziela: [
