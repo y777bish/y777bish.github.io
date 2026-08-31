@@ -5,19 +5,17 @@
 
 const SCHEDULE = {
   piatek: [
-    { time: "18:00", title: "Przyjazd i rejestracja", desc: "Powitanie uczestników" },
-    { time: "19:00", title: "Networking & prezentacje futures", desc: "" },
-    { time: "21:00", title: "Kasyno", desc: "Wieczór w kasynie" },
+    { time: "18:00", title: "Przyjazd i rejestracja", desc: "Powitanie uczestników z poza Śląska" },
+    { time: "21:00", title: "Kasyno", desc: "Wieczór zapoznawczy- ćwiczenia z terapii szokowej" },
   ],
   sobota: [
-    { time: "07:00", title: "Long Run 12 km z Prevencem Belą", desc: "" },
-    { time: "12:00", title: "Mistrzostwa ulicy Błotnej 13 w Chomiki", desc: "" },
-    { time: "16:00", title: "Wyjście w góry z Marcinem Woźniakiem", desc: "" },
-    { time: "20:00", title: "Eksploracja TempleOS", desc: "Wydarzenie specjalne" },
+    { time: "10:00", title: "Long Run 12 km z Prevencem Belą", desc: "Techniki wicemistrza Węgier z 1997 roku- jak radzić sobie z wypaleniem" },
+    { time: "16:30", title: "Prezentacje futures", desc: "Networking i poczęstunek" },
+    { time: "22:00", title: "Mistrzostwa ulicy Błotnej 13 w Chomiki", desc: "Zajęcia z radzenia sobie z burzliwymi emocjami" },
+    { time: "24:00", title: "Eksploracja TempleOS", desc: "Wydarzenie specjalne- jak zbudowany jest idealny software" },
   ],
   niedziela: [
-    { time: "10:00", title: "Śniadanie i podsumowanie", desc: "" },
-    { time: "12:00", title: "Wyjazd uczestników", desc: "" },
+    { time: "08:00", title: "Wyjście w góry z Marcinem Woźniakiem", desc: "W życiu ważny jest oddech, ochłonięcie po zajmującym głowę czasie" },
   ],
 };
 
