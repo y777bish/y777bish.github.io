@@ -5,7 +5,7 @@
 
 const SCHEDULE = {
   piatek: [
-    { time: "18:00", title: "Przyjazd i rejestracja", desc: "Powitanie uczestników z poza Śląska" },
+    { time: "18:00", title: "Przyjazd i rejestracja", desc: "Powitanie uczestników z poza Bielska i okolic" },
     { time: "21:00", title: "Kasyno", desc: "Wieczór zapoznawczy- ćwiczenia z terapii szokowej" },
   ],
   sobota: [
